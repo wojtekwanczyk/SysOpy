@@ -12,7 +12,7 @@ int main() {
 
     char **tab = createDynamicTable(tabSize,blockSize);
 
-    genRandTab(tab, tabSize, blockSize);
+    genRandTabD(tab, tabSize, blockSize);
 
 
 
@@ -33,7 +33,7 @@ int main() {
 
 
    /*
-    char *p = closestSum(tab,blockSize,tabSize,1000);
+    char *p = closestSumD(tab,blockSize,tabSize,1000);
 
     for(int i=0; i< blockSize; i++){
         printf("%d, ", p[i]);

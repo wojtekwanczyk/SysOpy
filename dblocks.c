@@ -69,13 +69,13 @@ char **deleteDynamicBlock(char **tab,unsigned int blockSize, unsigned int index,
 }
 
 // funkcja znajduje blok z suma o najblizszej do zadanej
-char *closestSum(char **tab, unsigned int blockSize, unsigned int tabSize, unsigned int sum){
+char *closestSumD(char **tab, unsigned int blockSize, unsigned int tabSize, unsigned int sum){
     int index = -1;
     int tmp;
     int difference = INT_MAX;
 
     for(int i = 0; i < tabSize; i++){
-        tmp = countSum(tab[i], blockSize);
+        tmp = countSumD(tab[i], blockSize);
         if(abs(tmp - sum) < difference){
             difference = abs(tmp - sum);
             index = i;
@@ -86,7 +86,7 @@ char *closestSum(char **tab, unsigned int blockSize, unsigned int tabSize, unsig
 }
 
 // funkcja zlicza sume bloku
-int countSum(char *block, unsigned int blockSize){
+int countSumD(char *block, unsigned int blockSize){
     int s = 0;
     for(int i = 0; i < blockSize; i++){
         s += (int)block[i];
@@ -95,7 +95,7 @@ int countSum(char *block, unsigned int blockSize){
     return s;
 }
 
-void genRandTab(char **tab, unsigned int tabSize, unsigned int blockSize){
+void genRandTabD(char **tab, unsigned int tabSize, unsigned int blockSize){
     srand((unsigned int)(time(NULL)));
     for(int i = 0; i < tabSize; i++)
         for(int j = 0; j < blockSize; j++){
