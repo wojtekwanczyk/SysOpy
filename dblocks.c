@@ -6,29 +6,57 @@
 #include <limits.h>
 #include <time.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 
-char **createDynamicTable(unsigned int tabSize, unsigned int blockSize){
+char **createDynamicTableC(unsigned int tabSize, unsigned int blockSize){
     char **tab =  calloc(tabSize, sizeof(char*));
 
     for(int i=0; i<tabSize; i++){
         tab[i] = calloc(blockSize, sizeof(char));
     }
 
+    genRandTabD(tab, tabSize, blockSize);
+
+    return tab;
+}
+
+char **createDynamicTableM(unsigned int tabSize, unsigned int blockSize){
+    char **tab =  malloc(tabSize * sizeof(char*));
+
+    for(int i=0; i<tabSize; i++){
+        tab[i] = malloc(blockSize* sizeof(char));
+    }
+
+    genRandTabD(tab, tabSize, blockSize);
+
     return tab;
 }
 
 void deleteDynamicTable(char **tab, int unsigned tabSize){
+
+    if(tab == NULL){
+        printf("Tablica zostala juz usunieta");
+        return;
+    }
+
     for(int i=0; i<tabSize; i++){
         free(tab[i]);
     }
     free(tab);
+    tab = NULL;
     return;
 }
 
 
 char **addDynamicBlock(char **tab,unsigned int blockSize,unsigned int index,unsigned int tabSize){
+    if(index > tabSize - 1){
+        printf("Indeks poza tablica");
+        return tab;
+    }
+
     char **newTab =  calloc(tabSize + 1, sizeof(char*));
+    srand((unsigned int)(time(NULL)));
 
     int i = 0;
     while(i<index){
@@ -36,6 +64,9 @@ char **addDynamicBlock(char **tab,unsigned int blockSize,unsigned int index,unsi
         i++;
     }
     newTab[i] = calloc(blockSize, sizeof(char));  //wstawienie bloku w dobre miejsce
+    char randomNr = (char)(rand() % 10);
+    for(int j = 0; j < blockSize; j++)
+        newTab[i][j] = randomNr;
 
     while(i < tabSize){
         newTab[i+1] = tab[i];  //przypisanie pozostalych blokow do nowej tablicy
@@ -49,6 +80,10 @@ char **addDynamicBlock(char **tab,unsigned int blockSize,unsigned int index,unsi
 
 
 char **deleteDynamicBlock(char **tab,unsigned int blockSize, unsigned int index, unsigned int tabSize){
+    if(index > tabSize - 1){
+        printf("Indeks poza tablica");
+        return tab;
+    }
     char **newTab =  calloc(tabSize - 1, sizeof(char*));
     int i = 0;
     while(i<index){
@@ -102,5 +137,29 @@ void genRandTabD(char **tab, unsigned int tabSize, unsigned int blockSize){
             tab[i][j] = (char)(i*10 + j);
             //tab[i][j] = (char)(rand() % 127);  //granica rozmiaru signed char
         }
+
+    return;
 }
+
+void printTab(char **tab, unsigned int tabSize, unsigned int blockSize){
+    for(int i = 0; i < tabSize; i++) {
+        for (int j = 0; j < blockSize; j++) {
+            printf("%d, ", tab[i][j]);
+        }
+        printf("\n");
+    }
+
+    return;
+}
+
+void printBlock(char *block, unsigned int blockSize){
+    printf("\n");
+    for (int j = 0; j < blockSize; j++) {
+        printf("%d, ", block[j]);
+    }
+    printf("\n");
+
+    return;
+}
+
 

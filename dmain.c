@@ -3,9 +3,8 @@
 #include <time.h>
 #include <string.h>
 #include <sys/time.h>
-#include "dblocks.h"
-#include "sblocks.h"
 #include <sys/resource.h>
+#include <dlfcn.h>
 
 
 /*
@@ -15,8 +14,72 @@
  *      [delete] [index] [ile]      [add] [index] [ile]     [deladdrep] [ile]
  */
 
+void *handle;
+
+
+void (*addStaticBlock)(unsigned int,unsigned int,unsigned int );
+void (*deleteStaticBlock)(unsigned int , unsigned int , unsigned int );
+int (*countSumS)(const char*, unsigned int);
+char *(*closestSumS)(unsigned int , unsigned int , unsigned int );
+void (*genRandTabS)(unsigned int , unsigned int );
+void (*printTabS)(unsigned int , unsigned int );
+void (*printBlockS)(char*, unsigned int );
+
+char **(*createDynamicTableC)(unsigned int, unsigned int);
+char **(*createDynamicTableM)(unsigned int, unsigned int);
+void (*deleteDynamicTable)(char**, int unsigned);
+char **(*addDynamicBlock)(char **, unsigned int ,unsigned int,unsigned int );
+char **(*deleteDynamicBlock)(char**,unsigned int , unsigned int, unsigned int);
+char *(*closestSumD)(char**, unsigned int, unsigned int, unsigned int);
+int (*countSumD)(char*, unsigned int);
+void (*genRandTabD)(char**, unsigned int, unsigned int);
+void (*printTab)(char**, unsigned int, unsigned int);
+void (*printBlock)(char*, unsigned int);
+
+
+
 
 int main(int argc, char *argv[]) {
+
+
+
+    handle = dlopen("./libblocks.so", RTLD_LAZY);
+
+    if (!handle) {
+        fprintf (stderr, "Error opening library: %s\n", dlerror());
+        exit(1);
+    }
+    dlerror();
+
+
+    addStaticBlock = dlsym(handle, "addStaticBlock");
+    deleteStaticBlock = dlsym(handle, "deleteStaticBlock");
+    countSumS = dlsym(handle, "countSumS");
+    closestSumS = dlsym(handle, "closestSumS");
+    genRandTabS = dlsym(handle, "genRandTabS");
+    printTabS = dlsym(handle, "printTabS");
+    printBlockS = dlsym(handle, "printBlockS");
+
+    createDynamicTableC = dlsym(handle, "createDynamicTableC");
+    createDynamicTableM = dlsym(handle, "createDynamicTableM");
+    deleteDynamicTable = dlsym(handle, "deleteDynamicTable");
+    addDynamicBlock = dlsym(handle, "addDynamicBlock");
+    deleteDynamicBlock = dlsym(handle, "deleteDynamicBlock");
+    closestSumD = dlsym(handle, "closestSumD");
+    countSumD = dlsym(handle, "countSumD");
+    genRandTabD = dlsym(handle, "genRandTabD");
+    printTab = dlsym(handle, "printTab");
+    printBlock = dlsym(handle, "printBlock");
+
+    char *error = dlerror();
+    if (error != NULL) {
+        fprintf(stderr, "Error loading library components: %s\n", error);
+        dlclose(handle);
+        exit(1);
+    }
+
+
+
 
 
     if(argc < 4){
@@ -300,6 +363,7 @@ int main(int argc, char *argv[]) {
     else{
         printf("Third argument must by 'static' or 'dynamic'");
     }
+
 
 
     return 0;

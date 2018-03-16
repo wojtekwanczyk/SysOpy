@@ -6,11 +6,16 @@
 #define ZAD1_SBLOCKS_H
 
 
-char *closestSumS(char **tab, unsigned int blockSize, unsigned int tabSize, unsigned int sum);
-int countSumS(char *block, unsigned int blockSize);
-void genRandTabS(char **tab, unsigned int tabSize, unsigned int blockSize);
+void addStaticBlock(unsigned int blockSize,unsigned int index,unsigned int tabSize);
+void deleteStaticBlock(unsigned int blockSize, unsigned int index, unsigned int tabSize);
+int countSumS(const char *block, unsigned int blockSize);
+char *closestSumS(unsigned int blockSize, unsigned int tabSize, unsigned int sum);
+void genRandTabS(unsigned int tabSize, unsigned int blockSize);
+void printTabS(unsigned int tabSize, unsigned int blockSize);
+void printBlockS(char *block, unsigned int blockSize);
 
 
-int blockTab[1000][100];
+
+extern char sTab[10000000];
 
 #endif //ZAD1_SBLOCKS_H
